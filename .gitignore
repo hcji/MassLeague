@@ -1,0 +1,8 @@
+DeepMASS_v2/data/*
+!DeepMASS_v2/data/.placeholder
+
+DeepMASS_v2/model/*
+!DeepMASS_v2/model/.placeholder
+
+DeepMASS_v2/temp/*
+!DeepMASS_v2/temp/.placeholder

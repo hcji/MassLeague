@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="756.0" prefWidth="1194.0" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.jhcg.pms.ui.controller.CandidatesAnchorPaneController">
+    <children>
+        <SplitPane orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <items>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                    <children>
+                        <SplitPane dividerPositions="0.4" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0"
+                                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <TableView fx:id="candidatesTableView" prefHeight="200.0" prefWidth="200.0">
+                                    <columns>
+                                        <TableColumn fx:id="inchikeyColumn" prefWidth="381.0" text="inchikey"/>
+                                        <TableColumn fx:id="smilesColumn" prefWidth="396.0" text="smiles"/>
+                                        <TableColumn fx:id="mwColumn" minWidth="0.0" prefWidth="227.0" text="mw"/>
+                                        <TableColumn fx:id="distanceColumn" minWidth="0.0" prefWidth="112.0"
+                                                     text="distance"/>
+                                        <TableColumn fx:id="rankColumn" prefWidth="74.0" text="rank"/>
+                                    </columns>
+                                </TableView>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                    <children>
+                                        <SplitPane dividerPositions="0.4" layoutX="12.0" layoutY="1.0"
+                                                   prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0"
+                                                   AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                                   AnchorPane.topAnchor="0.0">
+                                            <items>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0"
+                                                            prefWidth="100.0">
+                                                    <children>
+                                                        <ImageView fx:id="molStrucImageView" fitHeight="350.0"
+                                                                   fitWidth="350.0" pickOnBounds="true"
+                                                                   preserveRatio="true" AnchorPane.leftAnchor="60.0"
+                                                                   AnchorPane.topAnchor="10.0"/>
+                                                    </children>
+                                                </AnchorPane>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0"
+                                                            prefWidth="100.0">
+                                                    <children>
+                                                        <ImageView fx:id="againstMSImageView" fitHeight="350.0"
+                                                                   fitWidth="550.0" pickOnBounds="true"
+                                                                   preserveRatio="true" AnchorPane.leftAnchor="70.0"
+                                                                   AnchorPane.topAnchor="10.0"/>
+                                                    </children>
+                                                </AnchorPane>
+                                            </items>
+                                        </SplitPane>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </children>
+</AnchorPane>

@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option java_multiple_files = false;
+option java_package = "org.jhcg.pms.api";
+option java_outer_classname = "FileManageProto";
+
+
+//submitFile
+message SubmitFileRequest{
+  oneof fileData{
+    string name = 1;
+    bytes chunk = 2;
+  }
+}
+
+message SubmitFileResponse{
+  message Result{
+    int32 id = 1;
+    string title = 2;
+    string fileName = 3;
+    float mw = 4;
+    bytes mz = 5;
+    bytes intensities = 6;
+    string inchikey = 7;
+  }
+  Result result = 1;
+}
+
+//clearCache
+message ClearCacheRequest{
+  string desc = 1;
+}
+
+message ClearCacheResponse{
+  string  desc = 1;
+}
+
+//定义文件管理服务
+service FileManageService{
+  rpc submitFile(stream SubmitFileRequest) returns(stream SubmitFileResponse){}
+  rpc clearCache(ClearCacheRequest) returns(ClearCacheResponse){}
+}
+

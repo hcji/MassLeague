@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="135.0" prefWidth="280.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jhcg.pms.ui.controller.FilterAnchorPaneController">
+    <children>
+        <Text layoutX="7.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Displayed column:" wrappingWidth="114.638671875">
+            <font>
+                <Font size="13.0" />
+            </font>
+        </Text>
+        <HBox alignment="CENTER" layoutX="20.0" layoutY="31.0" prefHeight="30.0" prefWidth="203.0">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="mw:" wrappingWidth="29.71875">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Text>
+                <Text fx:id="origValueText" strokeType="OUTSIDE" strokeWidth="0.0" text="TEXT">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Text>
+                <Line endX="190.0" stroke="#c3b4b4" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" layoutX="48.0" layoutY="57.0" prefHeight="36.0" prefWidth="193.0" spacing="5.0">
+            <children>
+                <TextField fx:id="leftValueTextField" alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="66.0" />
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="≤">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="x">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Text>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="≤">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Text>
+                <TextField fx:id="rightValueTextField" prefHeight="23.0" prefWidth="66.0" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" layoutX="162.0" layoutY="93.0" prefHeight="36.0" prefWidth="115.0" spacing="10.0">
+            <children>
+                <Button fx:id="okButton" mnemonicParsing="false" onMouseClicked="#okButtonOnMouseClicked" text="OK" />
+                <Button fx:id="cancelButton" mnemonicParsing="false" onMouseClicked="#cancelButtonOnMouseClicked" text="Cancel" />
+            </children>
+        </HBox>
+        <Button fx:id="resetButton" layoutX="228.0" layoutY="22.0" mnemonicParsing="false" onMouseClicked="#resetButtonOnMouseClicked" text="reset" />
+    </children>
+</AnchorPane>

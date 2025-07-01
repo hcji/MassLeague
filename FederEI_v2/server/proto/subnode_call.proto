@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+//GetSubNodeCandidate
+message GetCandidatesRequest{
+    bytes chunk = 1;
+}
+message GetCandidatesResponse{
+    bytes chunk = 1;
+}
+
+
+//定义服务
+service SubNodeCallService{
+  rpc getCandidates(stream GetCandidatesRequest) returns(stream GetCandidatesResponse){}
+}

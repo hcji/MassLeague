@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+option java_multiple_files = false;
+option java_package = "org.jhcg.pms.api";
+option java_outer_classname = "ModelCallProto";
+
+//GetMergedCandidate
+message GetCandidateMessageRequest{
+  string fileName = 1;
+}
+message GetCandidateMessageResponse{
+    bytes chunk = 1;
+}
+// message GetCandidateMessageResponse{
+
+//   message Candidate{
+//     string inchikey = 1;
+//     string smiles = 2;
+//     int32 rank = 3;
+//     float distance = 4;
+//     float mw = 5;
+//     bytes mz = 6;
+//     bytes intensities = 7;
+// //    bytes molStruc = 6;
+// //    bytes againstMS = 7;
+//   }
+//   message Result{
+//     int32 id = 1;
+//     string fileName = 2;
+//     repeated Candidate candidates = 3;
+//   }
+//   repeated Result results = 1;
+// }
+
+
+//plot mass spectrum
+message PlotMSRequest{
+  bytes mz = 1;
+  bytes intensities = 2;
+}
+message PlotMSResponse{
+  bytes data = 1;
+}
+
+//plot mass spectrum
+message PlotMSAgainstRequest{
+  bytes orig_mz = 1;
+  bytes orig_intensities = 2;
+  int32 candi_index = 3;
+  // bytes mz = 4;
+  // bytes intensities = 5;
+}
+message PlotMSAgainstResponse{
+  bytes data = 1;
+}
+
+//plot Molecular structure diagram
+message PlotMolStrucRequest{
+  string smiles = 1;
+}
+message PlotMolStrucResponse{
+  bytes data = 1;
+}
+
+//mw_by_pim
+message MWByPIMRequest{
+  string fileName = 1;
+}
+message MWByPIMResponse{
+  message Result{
+    float mw = 1;
+  }
+  int32 id = 1;
+  Result result = 2;
+}
+
+//FastEI
+message FastEIRequest{
+  string fileName = 1;
+}
+message FastEIResponse{
+  message MatchedItem{
+    string smiles = 1;
+    float distance = 2;
+  }
+  message Result{
+    repeated MatchedItem matchedItems = 1;
+  }
+  int32 id = 1;
+  Result result = 2;
+}
+
+//deepei
+message DeepEIRequest{
+  string fileName = 1;
+}
+message DeepEIResponse{
+  message Candidate{
+    string smiles = 1;
+    float score = 2;
+  }
+  message Result{
+    repeated Candidate candidates = 1;
+  }
+  int32 id = 1;
+  Result result = 2;
+}
+
+
+
+//定义预测服务
+service ModelCallService{
+  rpc getCandidateMessage(GetCandidateMessageRequest) returns(stream GetCandidateMessageResponse){}
+  rpc plotMS(PlotMSRequest) returns(PlotMSResponse){}
+  rpc plotMSAgainst(PlotMSAgainstRequest) returns(PlotMSAgainstResponse){}
+  rpc plotMolStruc(PlotMolStrucRequest) returns(PlotMolStrucResponse){}
+  rpc mwByPIM(MWByPIMRequest) returns(stream MWByPIMResponse){}
+  rpc fastEI(FastEIRequest) returns(stream FastEIResponse){}
+  rpc deepEI(DeepEIRequest) returns(stream DeepEIResponse){}
+}

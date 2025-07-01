@@ -6,3 +6,54 @@ DeepMASS_v2/model/*
 
 DeepMASS_v2/temp/*
 !DeepMASS_v2/temp/.placeholder
+
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+
+### IntelliJ IDEA ###
+.idea/
+!.idea/icon*.png
+*.iml
+build/
+src/main/gen
+src/main/resources/templates.list
+src/main/resources/gitignore/*
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+__pycache__/
+
+
+# exclude file
+/processingms-server/models/
+/processingms-server/cache/
+
+### Mac OS ###
+.DS_Store

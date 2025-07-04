@@ -10,13 +10,6 @@ import org.jhcg.pms.api.ModelCallServiceGrpc;
  * @since JDK
  */
 public class PlotMolStruc implements ModelCallableFromSmi {
-    /**
-     * 进行mw by pim调用
-     *
-     * @param ip          服务器ip
-     * @param port        服务端口号
-     * @param smiles          质核比
-     */
     public byte[] run(String ip, int port, String smiles) {
         ManagedChannel managedChannel = ManagedChannelBuilder.forAddress(ip, port).maxInboundMessageSize(50 * 1024 * 1024).usePlaintext().build();
         try {

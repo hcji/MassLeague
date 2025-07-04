@@ -1,27 +1,27 @@
 package org.jhcg.pms.client;
 
 /**
- * 提供服务给用户
+ * Provide services to users
  *
  * @author Charles
  * @since JDK
  */
 public class ModelService {
     /**
-     * 通过文件调用对应服务
+     * Invoke the corresponding service through the file.
      *
-     * @param model            模型
-     * @param ip               服务器ip
-     * @param port             服务端口号
-     * @param fileName         文件名
-     * @param callableObserver 可调用模型的观察者
+     * @param model            model
+     * @param ip               server ip
+     * @param port             server port
+     * @param fileName         file name
+     * @param callableObserver The observable of the callable model
      */
     public static void call(ModelCallableFromFile model, String ip, int port, String fileName, CallableObserver<?> callableObserver) {
         model.run(ip, port, fileName, callableObserver);
     }
 
     /**
-     * 通过Smi调用对应服务
+     * Invoke the corresponding service through Smi
      *
      * @return byte[]
      */

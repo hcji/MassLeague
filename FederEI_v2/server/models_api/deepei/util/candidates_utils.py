@@ -46,20 +46,20 @@ def get_result_from_specs(specs=None):
     unknown_peak_vecs = np.array(unknown_peak_vecs)
     pred_fps = predict_fingerprint(unknown_peak_vecs, deepei_var["model_list"])
 
-    # 搜索
+    # search
     print("==========deepei:search==========")
     deepei_var["hnsw_index"].set_ef(300)  # ef should always be > k   ##
     k = 200
     I, D = deepei_var["hnsw_index"].knn_query(pred_fps, k)
 
-    # 计算与结果之间的jaccard相似度
+    # The Jaccard similarity between the calculation and the result
     print("==========deepei:calculate jaccard==========")
     jaccard_D = []
     for i in tqdm(range(len(I))):
         fps = np.array(deepei_var["hnsw_index"].get_items(I[i]))
         jaccard_D.append(1 - tanimoto(fps,pred_fps[i]))
         
-    # 返回结果
+    # return to the result
     print("==========deepei:return result==========")
     ans = []
     for i in tqdm(range(len(I))):

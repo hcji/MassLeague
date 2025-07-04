@@ -14,26 +14,26 @@ import java.util.concurrent.CountDownLatch;
  */
 public class MWByPIM implements ModelCallableFromFile {
     /**
-     * 进行mw by pim调用
+     * Make an MWByPIM call
      *
-     * @param ip               服务器ip
-     * @param port             服务端口号
-     * @param fileName         文件名
-     * @param callableObserver 可调用模型的观察者
+     * @param ip               server ip
+     * @param port             server port
+     * @param fileName         file name
+     * @param callableObserver The observable of the callable model
      */
     @Override
     public void run(String ip, int port, String fileName, CallableObserver callableObserver) {
         ManagedChannel managedChannel = ManagedChannelBuilder.forAddress(ip, port).maxInboundMessageSize(50 * 1024 * 1024).usePlaintext().build();
         try {
 
-            //0.创建CountDownLatch对象，用于非阻塞式rpc的线程同步
+            //0.Create a CountDownLatch object for thread synchronization in non-blocking RPC.
             CountDownLatch countDownLatch = new CountDownLatch(1);
-            //1.获取代理
+            //1.Obtain an agent
             ModelCallServiceGrpc.ModelCallServiceStub modelCallServiceStub = ModelCallServiceGrpc.newStub(managedChannel);
-            //2.创建请求参数
+            //2.Create request parameters
             ModelCallProto.MWByPIMRequest mwByPIMRequest = ModelCallProto.MWByPIMRequest.newBuilder().setFileName(fileName).build();
 
-            //3.进行rpc调用
+            //3.Make an RPC call
             modelCallServiceStub.mwByPIM(mwByPIMRequest, new StreamObserver<ModelCallProto.MWByPIMResponse>() {
 
                 @Override
@@ -50,14 +50,14 @@ public class MWByPIM implements ModelCallableFromFile {
                 @Override
                 public void onCompleted() {
                     callableObserver.onCompleted();
-                    //5.上传完成时释放 latch
+                    //5.Release after upload is completed
                     countDownLatch.countDown();
                 }
 
             });
-            //4.主线程等待服务器端返回完成
+            //4.The main thread waits for the server to return the completion.
             countDownLatch.await();
-            System.out.println("mwByPIM调用结束! pid:" + ProcessHandle.current().pid());
+            System.out.println("The mwByPIM call has ended! pid:" + ProcessHandle.current().pid());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {

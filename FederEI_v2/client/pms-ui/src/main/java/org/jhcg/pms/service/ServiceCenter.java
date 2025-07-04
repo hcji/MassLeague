@@ -41,7 +41,7 @@ public class ServiceCenter {
     }
 
     /**
-     * 创建数据库缓存文件夹
+     * Create the database cache folder
      */
     public static void createDBPathFolder() {
         File file = new File(dbPath);
@@ -54,10 +54,10 @@ public class ServiceCenter {
         return dbPath;
     }
 
-    //----------以下为grpc:FileManager服务----------
+    //----------grpc:FileManager service----------
 
     public static void submitFile(String path) {
-        //创建数据库缓存文件夹
+        //Create the database cache folder
         createDBPathFolder();
         FileManager.submitFile(IP, PORT, path, new CallableObserver<FileManageProto.SubmitFileResponse>() {
             private SqliteUtil sqliteUtil = null;
@@ -65,12 +65,12 @@ public class ServiceCenter {
             @Override
             public void onNext(FileManageProto.SubmitFileResponse value) {
                 try {
-                    //创建数据和数据表
+                    //Create data and data tables
                     if (sqliteUtil == null) {
                         String dbFilePath = dbPath;
-                        //创建helper对象，会打开与文件名同名的数据库文件，若文件不存在则创建
+
                         sqliteUtil = new SqliteUtil(dbFilePath + "cache.db");
-                        //创建存放结果的表
+                        //Create a table to store the results
                         String sql1 = "drop table if exists file_data;" +
                                 "create table file_data" +
                                 "(id integer," +
@@ -85,7 +85,7 @@ public class ServiceCenter {
                         sqliteUtil.getStatement().executeUpdate(sql1);
                     }
 
-                    //插入数据行
+                    //Insert data row
                     String sql2 = "insert into file_data (id,file_name,title,mw,mz,intensities,inchikey) values(?,?,?,?,?,?,?);";
 
                     PreparedStatement ps = sqliteUtil.getPreparedStatement(sql2);
@@ -122,16 +122,16 @@ public class ServiceCenter {
     }
 
     public static void clearCache() {
-        //清理前端缓存
+        //Clear the front-end cache
         System.out.println(dbPath);
         File folder = new File(dbPath);
         deleteFiles(folder);
-        //清理后端缓存
+        //Clear the backend cache
         FileManager.clearCache(IP, PORT);
     }
 
     /**
-     * 删除文件夹及文件夹下的文件
+     * Delete the folder and all the files within it
      *
      * @param file File
      */
@@ -149,7 +149,7 @@ public class ServiceCenter {
     }
 
 
-    //----------以下为grpc:ModelService服务----------
+    //----------grpc:ModelService service----------
     public static byte[] plotMS(byte[] mz, byte[] intensities) {
         return ModelService.call(new PlotMS(), IP, PORT, mz, intensities);
     }
@@ -188,12 +188,12 @@ public class ServiceCenter {
                     }
                 }
 //                try {
-//                    //创建数据和数据表
+//                    //Create data and data tables
 //                    if (sqliteUtil == null) {
 //                        String dbFilePath = dbPath;
-//                        //创建helper对象，会打开与文件名同名的数据库文件，若文件不存在则创建
+//
 //                        sqliteUtil = new SqliteUtil(dbFilePath + "cache.db");
-//                        //创建存放结果的表
+//                        //Create a table to store the results
 //                        String sql1 = "drop table if exists candidate_message;" +
 //                                "create table candidate_message" +
 //                                "(pid integer primary key autoincrement," +
@@ -210,7 +210,7 @@ public class ServiceCenter {
 //                        sqliteUtil.getStatement().executeUpdate(sql1);
 //                    }
 //
-//                    //插入数据行
+//                    //Insert data row
 //                    String sql2 = "insert into candidate_message (id,file_name,inchikey,smiles,rank,distance,mw,mz,intensities) values(?,?,?,?,?,?,?,?,?);";
 //                    for (ModelCallProto.GetCandidateMessageResponse.Result result : value.getResultsList()) {
 //                        for (ModelCallProto.GetCandidateMessageResponse.Candidate candidate : result.getCandidatesList()) {
@@ -260,24 +260,24 @@ public class ServiceCenter {
                 try {
                     sqliteUtil = new SqliteUtil(ServiceCenter.getDbPath() + "candidate.db");
 
-                    //2.刷新CandidatesTab
-                    //2.0清空所有行
+                    //2.Refresh CandidatesTab
+                    //2.0Clear all rows
                     CandidatesAnchorPaneSence.clearCandidatesTableRows();
-                    //2.1通过id查找到TableView对象
+                    //2.1Find the TableView object by using the id.
                     TableView tableView = (TableView) resultTabPane.lookup("#candidatesTableView");
-                    //2.2获取表格列：TableColumn
+                    //2.2Get table column: TableColumn
                     TableColumn<CandidatesTableRow, String> inchikeyColumn = (TableColumn) tableView.getColumns().get(0);
                     TableColumn<CandidatesTableRow, String> smilesColumn = (TableColumn) tableView.getColumns().get(1);
                     TableColumn<CandidatesTableRow, Double> mwColumn = (TableColumn) tableView.getColumns().get(2);
                     TableColumn<CandidatesTableRow, Double> distanceColumn = (TableColumn) tableView.getColumns().get(3);
                     TableColumn<CandidatesTableRow, Integer> rankColumn = (TableColumn) tableView.getColumns().get(4);
-                    //2.3设置列TableColumn与类CandidatesTableRow的关联性
+                    //2.3Associate TableColumn with CandidatesTableRow
                     inchikeyColumn.setCellValueFactory(new PropertyValueFactory<>("inchikey"));
                     smilesColumn.setCellValueFactory(new PropertyValueFactory<>("smiles"));
                     mwColumn.setCellValueFactory(new PropertyValueFactory<>("mw"));
                     distanceColumn.setCellValueFactory(new PropertyValueFactory<>("distance"));
                     rankColumn.setCellValueFactory(new PropertyValueFactory<>("rank"));
-                    //2.4绑定TableView行与CandidatesAnchorPaneSence.getCandidatesTableRows()
+                    //2.4Bind the TableView to CandidatesAnchorPaneScene.getCandidatesTableRows()
                     tableView.setItems(CandidatesAnchorPaneSence.getCandidatesTableRows());
 
                     String sql2 = "select pid,inchikey,smiles,mw,distance,rank from candidate_message where id=? and file_name=?;";
@@ -296,7 +296,7 @@ public class ServiceCenter {
                             BigDecimal bigDistance = new BigDecimal(distance).setScale(4, RoundingMode.HALF_UP);
                             int rank = resultSet.getInt("rank");
 
-                            // 添加表格行数据
+                            // Add data to the table rows
                             CandidatesAnchorPaneSence.addCandidatesTableRow(new CandidatesTableRow(pid, inchikey, smiles, bigMW, bigDistance, rank));
 
                         } while (resultSet.next());

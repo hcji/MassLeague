@@ -4,7 +4,7 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 
 /**
  * <pre>
- *定义预测服务
+ *Define the prediction service
  * </pre>
  */
 @javax.annotation.Generated(

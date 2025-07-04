@@ -142,7 +142,7 @@ def get_result_from_file(path: str):
     results = []
     for idx, fp in enumerate(tqdm(pred_fps)):
         scores = get_fp_score(fp, candidate_fps)
-        # 默认从小到大，使用切片取反,取前100个
+        # By default, from smallest to largest, use slicing with inversion, and select the first 100 items.
         sorted_index = np.argsort(scores)[::-1][:100]
         scores = scores[sorted_index]
         re_spectra = [database_spectrum_list[i] for i in sorted_index]

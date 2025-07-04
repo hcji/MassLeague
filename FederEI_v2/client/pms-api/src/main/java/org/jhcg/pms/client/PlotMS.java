@@ -11,14 +11,6 @@ import org.jhcg.pms.api.ModelCallServiceGrpc;
  * @since JDK
  */
 public class PlotMS {
-    /**
-     * 进行mw by pim调用
-     *
-     * @param ip          服务器ip
-     * @param port        服务端口号
-     * @param mz          质核比
-     * @param intensities 强度
-     */
     public byte[] run(String ip, int port, byte[] mz, byte[] intensities) {
         ManagedChannel managedChannel = ManagedChannelBuilder.forAddress(ip, port).maxInboundMessageSize(50 * 1024 * 1024).usePlaintext().build();
         try {

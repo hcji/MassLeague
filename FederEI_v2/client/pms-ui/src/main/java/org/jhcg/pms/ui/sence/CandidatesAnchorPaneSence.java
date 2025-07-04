@@ -6,7 +6,7 @@ import javafx.scene.control.TableView;
 import org.jhcg.pms.ui.model.CandidatesTableRow;
 
 /**
- * 候选物面板场景
+ * Candidate Object Panel Scene
  *
  * @author Charles
  * @since JDK

@@ -11,20 +11,20 @@ from spec2vec import SpectrumDocument
 
 
 def cosine_similarity(s,t):
-    # 计算 s 和 t 的点积
+    # Calculate the dot product of s and t
     dot_product = np.dot(s, t).reshape(-1)
 
-    # 计算 s 和 t 的范数
-    norm_X = np.linalg.norm(s, axis=1)  # 计算每一行的范数
-    norm_y = np.linalg.norm(t)          # 计算 y 的范数
+    # Calculate the norms of s and t
+    norm_X = np.linalg.norm(s, axis=1)
+    norm_y = np.linalg.norm(t)
 
-    # 返回余弦相似度
+    # Return cosine similarity
     return dot_product / (norm_X * norm_y)
 
 def get_result_from_specs(specs=None):
 
     print("==========fastei:get all vector of unknown_spectra==========")
-    # 数据编码
+    # data embedding
     word2vectors = []
     for i in tqdm(range(len(specs))):
         spectrum_in = SpectrumDocument(normalize_intensities(specs[i]), n_decimals=0)
@@ -32,24 +32,24 @@ def get_result_from_specs(specs=None):
 
         word2vectors.append(vetors)
 
-    # 搜索
+    # search
     print("==========fastei:search==========")
     xq = np.array(word2vectors).astype("float32")
 
     xq_len = np.linalg.norm(xq, axis=1, keepdims=True)
-    xq = xq / (xq_len + 1e-10)  # 防止除以0
+    xq = xq / (xq_len + 1e-10)  # Prevent division by zero
     fastei_var["hnsw_index"].set_ef(300)  # ef should always be > k   ##
     k = 200
     I, D = fastei_var["hnsw_index"].knn_query(xq, k)
 
-    # 计算与结果之间的cosine相似度
+    # The cosine similarity between the calculation and the result
     print("==========fastei:calculate cosine==========")
     cosine_D = []
     for i in tqdm(range(len(I))):
         fps = fastei_var["hnsw_index"].get_items(I[i])
         cosine = (1 - cosine_similarity(fps,xq[i])) / 2
         cosine_D.append(cosine)
-    # 返回结果
+    # return result
     print("==========fastei:return result==========")
     ans = []
     for i in tqdm(range(len(I))):

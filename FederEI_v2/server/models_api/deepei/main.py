@@ -12,7 +12,6 @@ def predict(specs=None):
     return get_result_from_specs(specs)
 
 
-# 按间距中的绿色按钮以运行脚本。
 if __name__ == "__main__":
     msp_file_path = pathlib.Path().cwd() / "cache" / "ms_file" / "1-10.msp"
     print("hh")

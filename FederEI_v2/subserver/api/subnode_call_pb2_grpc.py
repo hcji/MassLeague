@@ -6,7 +6,7 @@ from . import subnode_call_pb2 as subnode__call__pb2
 
 
 class SubNodeCallServiceStub(object):
-    """定义服务
+    """Definition of Service
     """
 
     def __init__(self, channel):
@@ -23,7 +23,7 @@ class SubNodeCallServiceStub(object):
 
 
 class SubNodeCallServiceServicer(object):
-    """定义服务
+    """Definition of Service
     """
 
     def getCandidates(self, request_iterator, context):
@@ -48,7 +48,7 @@ def add_SubNodeCallServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class SubNodeCallService(object):
-    """定义服务
+    """Definition of Service
     """
 
     @staticmethod

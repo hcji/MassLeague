@@ -53,20 +53,21 @@ public class MainController {
     @FXML
     private ListView<String> openedMSListView;
 
-    //openedMSListView的子项列表
+    //The sub-lists of the opened MSListView
     ObservableList<String> openedMSItems = FXCollections.observableArrayList();
 
     @FXML
     private TextField filterTextField;
 
 
-    //----------以下代码为控件绑定事件----------
+    //----------The following code is for binding events to the control.----------
 
     @FXML
     void openedMSListViewDragDropped(DragEvent event) {
         Dragboard dragboard = event.getDragboard();
         if (dragboard.hasFiles()) {
-            //获取拖拽到窗口的文件列表，筛选出.mgf或.msp结尾的文件
+            //Get the list of files dragged to the window
+            // and filter out the files with extensions of .mgf or .msp.
             List<File> files = dragboard.getFiles().stream()
                     .filter(f -> f.getName().matches(".*\\.m(gf|sp)$"))
                     .collect(Collectors.toList());
@@ -135,11 +136,11 @@ public class MainController {
                         idNumber++;
                         int id = resultSet1.getInt("id");
                         String inchikey = resultSet1.getString("inchikey");
-                        //写入候选物文件代表化合物的inchikey
+                        //Write the inchikey into the candidate file
                         idToInchikeyContent.append(id + "," + inchikey + "\n");
                     }
 
-                    //创建保存的文件
+                    //Create a file for persistence purposes
                     File idToInchikey = new File(saveDirectory.getAbsolutePath(), "IDToInchikey.csv");
                     FileWriter writer1 = new FileWriter(idToInchikey, true);
 
@@ -148,7 +149,7 @@ public class MainController {
 
                     System.out.println("IDToInchikey.csv over");
 
-                    //搜索所有的保留物信息
+                    //Traverse all the candidate
                     String sql2 = "select id,inchikey,smiles,mw,distance,rank from candidate_message;";
                     PreparedStatement ps2 = sqliteUtil2.getPreparedStatement(sql2);
                     resultSet2 = ps2.executeQuery();
@@ -164,11 +165,11 @@ public class MainController {
 
 
                         if (!idToResultMap.containsKey(id)) {
-                            // 如果不存在，则创建一个新的列表
+                            // If it does not exist, then create a new list
                             idToResultMap.put(id, new ArrayList<>());
                         }
 
-                        // 将记录添加到相应的列表中
+                        // Add the records to the corresponding list
                         SaveCandidateData saveCandidateData = new SaveCandidateData(ik, smiles, mw, distance, rank);
                         idToResultMap.get(id).add(saveCandidateData);
 
@@ -192,7 +193,7 @@ public class MainController {
                                     + "," + data.getSmiles() + "," + bigMW + "," + bigDistance + "," + data.getRank() + "\n");
                         }
 
-                        //创建保存候选物信息的文件
+                        //Create a file to store the information of the candidates
                         File csvFile = new File(saveDirectory.getAbsolutePath(), i + ".csv");
                         FileWriter writer2 = new FileWriter(csvFile, true);
                         writer2.write(csvContent.toString());
@@ -265,7 +266,7 @@ public class MainController {
     void buttonRight1MouseClicked(MouseEvent event) {
         //TODO 每次提交文件数据库表会删除重建
         Thread thread = new Thread(() -> {
-            //1.获取已打开文件的列表
+            //1.Obtain the list of opened files
             SqliteUtil sqliteUtil = null;
             ResultSet resultSet = null;
             ArrayList<String> fileNames = new ArrayList<>();
@@ -296,7 +297,7 @@ public class MainController {
                 }
             }
 
-            //2.依次对每个文件调用服务
+            //2.Call the service for each file in sequence
             for (String fileName : fileNames) {
                 ServiceCenter.getCandidateMessage(fileName, resultTabPane);
             }
@@ -315,16 +316,16 @@ public class MainController {
     @FXML
     void buttonRight3MouseClicked(MouseEvent event) {
         Thread thread = new Thread(() -> {
-            //清空谱图
+            //Clear the spectrum graph
             ImageView msImageView = (ImageView) resultTabPane.lookup("#msImageView");
-            //清空候选物列表
+            //Clear the list of candidates
             Platform.runLater(()->{
                 msImageView.setImage(null);
                 CandidatesAnchorPaneSence.clearCandidatesTableRows();
-                //清空质谱列表
+                //Clear the mass spectrometry list
                 openedMSItems.clear();
             });
-            //清空缓存
+            //clear cache
             ServiceCenter.clearCache();
 
         });
@@ -332,17 +333,17 @@ public class MainController {
         thread.start();
     }
 
-    //----------以下代码是业务代码----------
+    //----------The following code is the business code.----------
     private void addMSFile(List<File> files) {
         SqliteUtil sqliteUtil = null;
         ResultSet resultSet = null;
         try {
             for (File file : files) {
-//                //1.过滤已被添加的文件
-                //2.调用文件上传，创建文件对应的数据库，并将质谱id，文件名，title存入数据库
+//                //1.Filter out the added files
+                //2.upload files
                 ServiceCenter.submitFile(file.getCanonicalPath());
 
-//                //2.显示质谱的文件
+//                //2.Display mass spectrometry file
 //                sqliteUtil = new SqliteUtil(ServiceCenter.getDbPath() + "cache.db");
 //                String sql2 = "select * from file_data;";
 //                PreparedStatement ps2 = sqliteUtil.getPreparedStatement(sql2);
@@ -388,7 +389,7 @@ public class MainController {
         SqliteUtil sqliteUtil = null;
         ResultSet resultSet = null;
         try {
-            //2.显示质谱的文件
+            //2.Display mass spectrometry file
             Platform.runLater(() -> {
                 openedMSItems.clear();
             });
@@ -429,25 +430,26 @@ public class MainController {
     }
 
     /**
-     * 初始化：
-     * 1.为TabPane的Tab设置内容
-     * 2.为openedMSListView的选中事件绑定监听
-     * 3.给candidatesTableView列表项绑定选中事件
+     * init：
+     * 1.Set the content for the tabs of the TabPane
+     * 2.Bind the listener for the selection event of openedMSListView
+     * 3.Bind the selection event to the items of the candidatesTableView list.
      */
     public void initialize() {
-        //把resultTabPane列表绑定到全局Sence
+        //Bind the resultTabPane list to the global Sense
         MainSence.setResultTabPane(resultTabPane);
-        //1初始化TabPane
+        //1Initialize TabPane
         addToTabPane("/fxml/MSAnchorPane.fxml", "MS", resultTabPane);
         addToTabPane("/fxml/CandidatesAnchorPane.fxml", "Candidates", resultTabPane);
 
-        //2.为openedMSListView初始化相关内容
-        //2.1绑定列表项对象
+        //2.Initialize the relevant contents for openedMSListView
+        //2.1Bind the list item object
         openedMSListView.setItems(openedMSItems);
-        //2.2为选中事件绑定监听：刷新显示界面
+        //2.2Bind the listener for the selected event: Refresh the display interface
         openedMSListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                //获取选中值的文件名和id,并存储在MainSence的静态变量中
+                //Obtain the file name and ID of the selected value,
+                // and store them in the static variables of MainSence.
                 String temp[] = newValue.split("\n")[2].split("\t");
                 MainSence.setCurrentFileName(temp[0].split(":")[1]);
                 MainSence.setCurrentID(Integer.valueOf(temp[1].split(":")[1]));
@@ -461,7 +463,7 @@ public class MainController {
 //            System.out.println(MainSence.getCurrentFileName());
 //            System.out.println(MainSence.getCurrentID());
         });
-        //3.为filterTextField绑定
+        //3.Bind to filterTextField
         filterTextField.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -476,21 +478,22 @@ public class MainController {
     }
 
     /**
-     * 添加Tab到TabPane
+     * Add a Tab to the TabPane
      *
-     * @param path    fxml文件路径
-     * @param tabName Tab的名称
+     * @param path    fxml file path
+     * @param tabName The name of the tab
      */
     public void addToTabPane(String path, String tabName, TabPane tabPane) {
-        //1.1声明AnchorPane变量
+        //1.1Declare the AnchorPane variable
         AnchorPane anchorPane = null;
         try {
-            //1.2读取读取fxml文件并赋值给AnchorPane变量
+            //1.2Read and load the fxml file and assign it to the AnchorPane variable
             anchorPane = FXMLLoader.load(Objects.requireNonNull(MainSence.class.getResource(path)));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //1.3用AnchorPane对象创建对应的Tab，再把Tab添加到TabPane
+        //1.3Create the corresponding Tab using the AnchorPane object,
+        // and then add the Tab to the TabPane
         Tab tab = new Tab(tabName, anchorPane);
         tab.setDisable(true);
         tab.setId(tabName + "Tab");
@@ -498,7 +501,7 @@ public class MainController {
     }
 
     /**
-     * 响应ListView点击事件刷新UI界面
+     * Respond to the click event of the ListView and refresh the UI interface
      */
     public void refreshResultTabPane(TabPane resultTabPane) {
         Thread thread1 = new Thread(() -> {
@@ -520,23 +523,23 @@ public class MainController {
         try {
             sqliteUtil = new SqliteUtil(ServiceCenter.getDbPath() + "cache.db");
 
-            //1.刷新MSTab
-            //1.1通过id查找到ImageView对象
+            //1.Refresh MSTab
+            //1.1Find the ImageView object by using the id.
             ImageView msImageView = (ImageView) resultTabPane.lookup("#msImageView");
             Platform.runLater(() -> {
                 msImageView.setImage(null);
                 resultTabPane.getTabs().get(0).setDisable(true);
             });
-            //1.2进行数据库操作
+            //1.2Perform database operations
             String sql1 = "select mz,intensities from file_data where id=? and file_name=?;";
             PreparedStatement ps1 = sqliteUtil.getPreparedStatement(sql1);
             ps1.setInt(1, MainSence.getCurrentID());
             ps1.setString(2, MainSence.getCurrentFileName());
             resultSet = ps1.executeQuery();
-            //1.3根据查询结果更新显示
+            //1.3Update the display based on the query results
             if (resultSet.next()) {
                 byte[] msData = ServiceCenter.plotMS(resultSet.getBytes("mz"), resultSet.getBytes("intensities"));
-                //设置MSTab为可点击
+                //Set MSTab as clickable
                 ByteArrayInputStream bais = new ByteArrayInputStream(msData);
                 Platform.runLater(() -> {
                     msImageView.setImage(new Image(bais));
@@ -573,28 +576,28 @@ public class MainController {
         try {
             sqliteUtil = new SqliteUtil(ServiceCenter.getDbPath() + "candidate.db");
 
-            //2.刷新CandidatesTab
-            //2.0清空所有行
+            //2.Refresh CandidatesTab
+            //2.0Clear all rows
             Platform.runLater(() -> {
                 CandidatesAnchorPaneSence.clearCandidatesTableRows();
                 resultTabPane.getTabs().get(1).setDisable(true);
             });
 
-            //2.1通过id查找到TableView对象
+            //2.1Find the TableView object by using the id.
             TableView tableView = (TableView) resultTabPane.lookup("#candidatesTableView");
-            //2.2获取表格列：TableColumn
+            //2.2Get table column: TableColumn
             TableColumn<CandidatesTableRow, String> inchikeyColumn = (TableColumn) tableView.getColumns().get(0);
             TableColumn<CandidatesTableRow, String> smilesColumn = (TableColumn) tableView.getColumns().get(1);
             TableColumn<CandidatesTableRow, BigDecimal> mwColumn = (TableColumn) tableView.getColumns().get(2);
             TableColumn<CandidatesTableRow, BigDecimal> distanceColumn = (TableColumn) tableView.getColumns().get(3);
             TableColumn<CandidatesTableRow, Integer> rankColumn = (TableColumn) tableView.getColumns().get(4);
-            //2.3设置列TableColumn与类CandidatesTableRow的关联性
+            //2.3Establish the association between the TableColumn and the class CandidatesTableRow
             inchikeyColumn.setCellValueFactory(new PropertyValueFactory<>("inchikey"));
             smilesColumn.setCellValueFactory(new PropertyValueFactory<>("smiles"));
             mwColumn.setCellValueFactory(new PropertyValueFactory<>("mw"));
             distanceColumn.setCellValueFactory(new PropertyValueFactory<>("distance"));
             rankColumn.setCellValueFactory(new PropertyValueFactory<>("rank"));
-            //2.4绑定TableView行与CandidatesAnchorPaneSence.getCandidatesTableRows()
+            //2.4Bind the rows of the TableView to CandidatesAnchorPaneSense.getCandidatesTableRows()
             tableView.setItems(CandidatesAnchorPaneSence.getCandidatesTableRows());
 
             String sql2 = "select pid,inchikey,smiles,mw,distance,rank from candidate_message where id=? and file_name=?;";
@@ -612,7 +615,7 @@ public class MainController {
                     double distance = resultSet.getDouble("distance");
                     BigDecimal bigDistance = new BigDecimal(distance).setScale(4, RoundingMode.HALF_UP);
                     int rank = resultSet.getInt("rank");
-                    // 添加表格行数据
+                    // Add data to the table rows
                     Platform.runLater(() -> {
                         CandidatesAnchorPaneSence.addCandidatesTableRow(new CandidatesTableRow(pid, inchikey, smiles, bigMW, bigDistance, rank));
                     });

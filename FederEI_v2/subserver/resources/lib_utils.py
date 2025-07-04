@@ -23,7 +23,7 @@ from matchms.filtering import normalize_intensities
 import torch
 import gc
 
-# 以下方法加载库文件
+# The following method loads the library file
 def load_general_lib(dataset_name: str):
     load_path = pathlib.Path(__file__).resolve().parent / "database" / dataset_name / "general"
     # print(f"=========={dataset_name}:general:load smi_list:==========")
@@ -88,7 +88,7 @@ def load_fastei_lib(dataset_name: str):
     return hnsw_index
 
 
-# 以下方法生成库文件
+# The following method generates the library file
 def get_inchikey(smi):
     try:
         mol = Chem.MolFromSmiles(smi)
@@ -101,11 +101,11 @@ def get_inchikey(smi):
 def gen_general_lib(spectrum_list: list, dataset_name: str):
     
     save_path = pathlib.Path(__file__).resolve().parent / "database" / dataset_name / "general"
-    # 检查文件夹是否存在，如果不存在则创建它
+    # Check if the folder exists. If it doesn't exist, create it.
     if not save_path.exists():
         save_path.mkdir(parents=True)
     else:
-        raise "数据库同名！"
+        raise "Database with the same name！"
 
     smi_list = []
     mz_list = []
@@ -154,18 +154,18 @@ def gen_deepei_lib(spectrum_list: list, dataset_name: str):
         pathlib.Path(__file__).resolve().parent / "database" / dataset_name / "deepei"
     )
     
-    # 检查文件夹是否存在，如果不存在则创建它
+    # Check if the folder exists. If it doesn't exist, create it.
     if not save_path.exists():
         save_path.mkdir(parents=True)
     else:
-        raise "数据库同名！"
+        raise "Database with the same name！"
     
     with open(save_path.parent / "general" / "lib_smi.npy","rb") as f:
         smi_list = np.load(f,allow_pickle=True)
     
     print(f"len(smi_list):{len(smi_list)}")
     
-    # 计算fpkeep
+    # Calculate fpkeep
     mlp = pd.read_csv(
         str(
             pathlib.Path(__file__).resolve().parent
@@ -181,7 +181,7 @@ def gen_deepei_lib(spectrum_list: list, dataset_name: str):
     mlp.columns = ["id", "accuracy", "precision", "recall", "f1"]
     fpkeep = mlp["id"][np.where(mlp["f1"] > 0.5)[0]]
 
-    # 计算fp，并保存
+    # Calculate fp and save it.
     smi_step = 50000
     for i,index in enumerate(tqdm(range(0,len(smi_list),smi_step))):
         if (save_path / f"lib_fp_{i}.npy").exists():
@@ -210,7 +210,7 @@ def gen_deepei_lib(spectrum_list: list, dataset_name: str):
     print(f"merged_data.shape:{merged_data.shape}")
     save_npy(str(save_path / "lib_fp.npy"), merged_data)
 
-    # 删除中间文件 
+    # Delete the intermediate files
     for file_path in sorted_files:
         file_path.unlink()
     
@@ -244,11 +244,11 @@ def gen_fastei_lib(spectrum_list: list, dataset_name: str):
         pathlib.Path(__file__).resolve().parent / "model" / "references_word2vec.model"
     )
     
-    # 检查文件夹是否存在，如果不存在则创建它
+    # Check if the folder exists. If it doesn't exist, create it.
     if not save_path.exists():
         save_path.mkdir(parents=True)
     else:
-        raise "数据库同名！"
+        raise "The database has the same name!"
 
     model = gensim.models.Word2Vec.load(str(spec2vec_path))
 

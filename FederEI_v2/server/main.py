@@ -10,10 +10,10 @@ import gc
 gc.disable()
 
 
-# 开启服务器，对外提供rpc调用
+# Start the server and provide RPC calls externally.
 def run():
     init_var("base_dataset")
-    # 1.创建服务器对象
+    # 1.Create a server object
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=10),
         options=[
@@ -22,7 +22,7 @@ def run():
         ],
     )
 
-    # 2.注册实现的服务到服务器对象中
+    # 2.Register the implemented service in the server object.
     file_manage_pb2_grpc.add_FileManageServiceServicer_to_server(
         file_manage_service_impl.FileManageServiceImpl(), server
     )
@@ -30,14 +30,14 @@ def run():
         model_call_service_impl.ModelCallServiceImpl(), server
     )
 
-    # 3.为服务器设置地址
-    server.add_insecure_port("0.0.0.0:5577")  # 0.0.0.0 通配符地址，用于服务器监听所有可用的 IP 地址
+    # 3.Set the address for the server
+    server.add_insecure_port("0.0.0.0:5577")  # 0.0.0.0 wildcard address, used by the server to listen to all available IP addresses
 
-    # 4.启动服务器
-    print("服务器已开启")
+    # 4.Start the server
+    print("The server has been activated.")
     server.start()
 
-    # 5.阻塞主线程
+    # 5.Block the main thread
     server.wait_for_termination()
 
 

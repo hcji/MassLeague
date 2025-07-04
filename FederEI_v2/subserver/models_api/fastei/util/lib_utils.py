@@ -14,7 +14,7 @@ from ..data_process.spec_to_wordvector import spec_to_wordvector
 from ..data_process import spec
 from matchms.filtering import normalize_intensities
 
-# 以下方法加载库文件
+# The following method loads the library file
 def load_models():
     model_file = str(
         pathlib.Path(__file__).resolve().parent.parent / "model" / "references_word2vec.model"
@@ -59,7 +59,7 @@ def load_lib(dataset_name:str):
     )
 
 
-# 以下方法生成库文件
+# The following method generates the library file
 def get_inchikey(smi):
     try:
         mol = Chem.MolFromSmiles(smi)
@@ -100,7 +100,7 @@ def gen_lib(path:str,dataset_name:str):
     inchikey_list = Parallel(n_jobs=-1)(delayed(get_inchikey)(s) for s in tqdm(smi_list))
     
     save_path = pathlib.Path(__file__).resolve().parent.parent / "save_data" / dataset_name
-    # 检查文件夹是否存在，如果不存在则创建它
+    # Check if the folder exists. If it doesn't exist, create it.
     if not save_path.exists():
         save_path.mkdir(parents=True)
         save_npy(str(save_path / "lib_smi.npy"),np.array(smi_list))
@@ -138,5 +138,5 @@ def gen_lib(path:str,dataset_name:str):
         p.set_ef(300)  # ef should always be > k   ##
         p.save_index(str(save_path / "references_index.bin"))
     else:
-        raise '数据库同名！'
+        raise 'Database with the same name！'
     

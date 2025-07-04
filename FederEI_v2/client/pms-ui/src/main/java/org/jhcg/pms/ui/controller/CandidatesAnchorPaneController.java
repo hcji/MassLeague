@@ -65,7 +65,7 @@ public class CandidatesAnchorPaneController {
 
     public void initialize() {
 
-        //给candidatesTableView列表项绑定选中事件
+        //Bind the selection event to the items of the candidatesTableView list.
         candidatesTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<CandidatesTableRow>() {
             @Override
             public void changed(ObservableValue<? extends CandidatesTableRow> observable, CandidatesTableRow oldValue, CandidatesTableRow newValue) {
@@ -81,7 +81,7 @@ public class CandidatesAnchorPaneController {
                                 molStrucImageView.setImage(null);
                                 againstMSImageView.setImage(null);
                             });
-                            //获取输入谱的质核比与强度
+                            //Obtain the mass-to-charge ratio and intensity of the input spectrum
                             sqliteUtil1 = new SqliteUtil(ServiceCenter.getDbPath() + "cache.db");
                             sqliteUtil2 = new SqliteUtil(ServiceCenter.getDbPath() + "candidate.db");
                             String sql1 = "select mz,intensities from file_data where id=? and file_name=?;";
@@ -93,7 +93,8 @@ public class CandidatesAnchorPaneController {
                                 byte[] origMz = resultSet.getBytes("mz");
                                 byte[] origIntensities = resultSet.getBytes("intensities");
 
-                                //查找候选物的质核比、强度、smiles,并画出对比质谱图和分子结构图
+                                //Search for the mass-to-charge ratio, intensity, and smiles of the candidates,
+                                // and draw the comparison mass spectrum and molecular structure diagrams.
                                 String sql2 = "select smiles,candi_index from candidate_message where pid=?;";
                                 PreparedStatement ps2 = sqliteUtil2.getPreparedStatement(sql2);
                                 ps2.setInt(1, newValue.getPid());
@@ -150,14 +151,14 @@ public class CandidatesAnchorPaneController {
             }
         });
 
-        //2.给mw添加右击事件
-        // 2.1创建右击菜单项
+        //2.Add a right-click event to mw
+        // 2.1Create right-click menu item
         ContextMenu contextMenu = new ContextMenu();
         MenuItem menuItem1 = new MenuItem("Filter          ");
         contextMenu.getItems().addAll(menuItem1);
-        // 2.2为mwColumn添加右击事件
+        // 2.2Add a right-click event to mwColumn
         mwColumn.setContextMenu(contextMenu);
-        // 2.3为MenuItem设置点击事件
+        // 2.3Set the click event for the MenuItem
         menuItem1.setOnAction(event -> {
             AnchorPane filterAnchorPane = null;
             try {
@@ -165,17 +166,18 @@ public class CandidatesAnchorPaneController {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            // 创建一个新的Stage作为弹出窗口
+            // Create a new Stage as a pop-up window
             Stage filterStage = new Stage();
             filterStage.setTitle("Filter");
             filterStage.setResizable(false);
 
-            // 设置窗口模式为模态，这样用户必须关闭这个窗口才能返回到主窗口
+            // Set the window mode to modal. This way, the user must close this window
+            // before returning to the main window.
             filterStage.initModality(Modality.APPLICATION_MODAL);
 
             Scene scene = new Scene(filterAnchorPane);
             filterStage.setScene(scene);
-            filterStage.showAndWait(); // 显示窗口并等待用户关闭
+            filterStage.showAndWait(); // Display the window and wait for the user to close it.
 
         });
     }

@@ -20,22 +20,22 @@ import java.util.concurrent.CountDownLatch;
 public class FileManager {
 
     /**
-     * 进行rpc调用，提交文件到服务端
+     * Make an RPC call and submit the file to the server.
      *
-     * @param ip               服务器ip
-     * @param port             服务端口号
-     * @param path             文件路径
-     * @param callableObserver 可调用模型的观察者
+     * @param ip               server ip
+     * @param port             server port
+     * @param path             file path
+     * @param callableObserver The observable of the callable model
      */
     public static void submitFile(String ip, int port, String path, CallableObserver<FileManageProto.SubmitFileResponse> callableObserver) {
         FileInputStream fis = null;
         ManagedChannel managedChannel = ManagedChannelBuilder.forAddress(ip, port).maxInboundMessageSize(50 * 1024 * 1024).usePlaintext().build();
         try {
-            //0.创建 CountDownLatch 用于等待上传完成
+            //0.Create a CountDownLatch to wait for the upload to complete
             CountDownLatch countDownLatch = new CountDownLatch(1);
-            //1.获取rpc代理
+            //1.Obtain the RPC proxy
             FileManageServiceGrpc.FileManageServiceStub fileManageServiceStub = FileManageServiceGrpc.newStub(managedChannel);
-            //2.进行rpc调用
+            //2.Make an RPC call
             StreamObserver<FileManageProto.SubmitFileRequest> submitFileRequestStreamObserver = fileManageServiceStub.submitFile(new StreamObserver<FileManageProto.SubmitFileResponse>() {
                 @Override
                 public void onNext(FileManageProto.SubmitFileResponse value) {
@@ -51,7 +51,7 @@ public class FileManager {
                 @Override
                 public void onCompleted() {
                     callableObserver.onCompleted();
-                    //上传完成时释放 latch
+                    //Release after upload is completed
                     countDownLatch.countDown();
                 }
             });
@@ -60,10 +60,10 @@ public class FileManager {
             File msFile = new File(path);
 
             if (msFile.exists() && msFile.isFile()) {
-                //传输文件名
+                //Transfer file name
                 FileManageProto.SubmitFileRequest submitFileRequest = FileManageProto.SubmitFileRequest.newBuilder().setName(msFile.getName()).build();
                 submitFileRequestStreamObserver.onNext(submitFileRequest);
-                //传输文件内容
+                //Transmit the content of the file
                 fis = new FileInputStream(msFile);
                 byte[] buffer = new byte[1024 * 1024];
                 int len;
@@ -74,13 +74,13 @@ public class FileManager {
                 }
                 submitFileRequestStreamObserver.onCompleted();
             } else {
-                throw new RuntimeException("文件不存在！");
+                throw new RuntimeException("file does not exist!");
             }
 
 
-            //主线程等待服务器端返回完成
+            //The main thread waits for the server to return the completion.
             countDownLatch.await();
-            System.out.println("submitFile调用结束! pid:" + ProcessHandle.current().pid());
+            System.out.println("SubmitFile has been called successfully! pid:" + ProcessHandle.current().pid());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -102,15 +102,15 @@ public class FileManager {
     }
 
     public static void clearCache(String ip, int port) {
-        //1.创建通信的管道
+        //1.create the communication pipeline
         ManagedChannel managedChannel = ManagedChannelBuilder.forAddress(ip, port).usePlaintext().build();
         try {
-            //2.获取代理对象stub
+            //2.Obtain the stub of the proxy object
             FileManageServiceGrpc.FileManageServiceBlockingStub fileManageServiceBlockingStub = FileManageServiceGrpc.newBlockingStub(managedChannel);
-            //3.完成rpc调用
-            //3.1准备参数
+            //3.Complete the RPC call
+            //3.1Prepare parameters
             FileManageProto.ClearCacheRequest clearCacheRequest = FileManageProto.ClearCacheRequest.newBuilder().setDesc("clear cache").build();
-            //3.2进行rpc调用，获取相应的内容
+            //3.2Make an RPC call to obtain the corresponding content
             FileManageProto.ClearCacheResponse clearCacheResponse = fileManageServiceBlockingStub.clearCache(clearCacheRequest);
             System.out.println(clearCacheResponse.getDesc());
         } catch (Exception e) {

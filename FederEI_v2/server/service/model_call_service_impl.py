@@ -20,7 +20,7 @@ class ModelCallServiceImpl(model_call_pb2_grpc.ModelCallServiceServicer):
         try:
             ms_file_path = pathlib.Path.cwd() / "cache" / "ms_file" / request.fileName
             candi_db_path = pathlib.Path.cwd() / "cache" / "ms_file" / "candidate.db"
-            # 路径检查
+            # Path check
             check_path(ms_file_path)
 
             final_candis_list = models_interaction.get_candidate_message(ms_file_path)
@@ -67,15 +67,15 @@ class ModelCallServiceImpl(model_call_pb2_grpc.ModelCallServiceServicer):
                             candi_index,
                         ),
                     )
-            # 提交事务
+            # Submit the transaction
             conn.commit()
-            # 关闭数据库连接
+            # Close the database connection
             conn.close()
             print("=====cache:complete=====")
             
             gc.enable()
             
-            """生成文件的块数据"""
+            """Generate the block data of the file"""
             with open(candi_db_path, "rb") as f:
                 while True:
                     chunk = f.read(49 * 1024 * 1024)
@@ -167,7 +167,7 @@ class ModelCallServiceImpl(model_call_pb2_grpc.ModelCallServiceServicer):
         try:
             ms_file_path = pathlib.Path.cwd() / "cache" / "ms_file" / request.fileName
 
-            # 路径检查
+            # Path check
             check_path(ms_file_path)
 
             answers = models_interaction.get_mw_by_pim(ms_file_path)
@@ -186,7 +186,7 @@ class ModelCallServiceImpl(model_call_pb2_grpc.ModelCallServiceServicer):
         try:
             ms_file_path = pathlib.Path.cwd() / "cache" / "ms_file" / request.fileName
 
-            # 路径检查
+            # Path check
             check_path(ms_file_path)
 
             answers = models_interaction.get_FastEI(ms_file_path)
@@ -214,7 +214,7 @@ class ModelCallServiceImpl(model_call_pb2_grpc.ModelCallServiceServicer):
         try:
             ms_file_path = pathlib.Path.cwd() / "cache" / "ms_file" / request.fileName
 
-            # 路径检查
+            # Path check
             check_path(ms_file_path)
 
             answers = models_interaction.get_deepei(ms_file_path)

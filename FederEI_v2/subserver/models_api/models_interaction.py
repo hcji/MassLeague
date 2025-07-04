@@ -17,12 +17,12 @@ def get_candidate_message(vectors) -> list:
     weight_rate1 = 0.5  # fastei weight
     weight_rate2 = 1 - weight_rate1  # deepei weight
     
-    final_candis_list = [] #暂存所有结果
+    final_candis_list = [] # Store all the results temporarily
     for i in tqdm(range(len(results_fastei))):
 
         res_fast = results_fastei[i]
         res_deep = results_deepei[i]
-        # 比较算法
+        # Comparison algorithm
         fast_dict = defaultdict(list)
         for candi in res_fast:
             fast_dict[candi["inchikey"][:14]].append(candi)
@@ -34,12 +34,12 @@ def get_candidate_message(vectors) -> list:
         fast_keys = set(fast_dict.keys())
         deep_keys = set(deep_dict.keys())
 
-        # 找到匹配和没有匹配的fast_keys和deep_keys
+        # Find the matching and non-matching fast_keys and deep_keys
         intersection_keys = deep_keys & fast_keys
         fast_unmatcheds = fast_keys - intersection_keys
         deep_unmatcheds = deep_keys - intersection_keys
 
-        final_candis = []  # 存储最后结果的列表
+        final_candis = []  # The list for storing the final results
         
         for intersection_key in intersection_keys:
             fast_candi = fast_dict[intersection_key]
@@ -81,7 +81,7 @@ def get_candidate_message(vectors) -> list:
 
         final_candis = heapq.nsmallest(100, final_candis, key=lambda x: x["distance"])
         
-        # # 对每一个候选物进行处理：增加元数据
+        # # Process each candidate: add metadata
         # for j, candi in enumerate(final_candis):
         #     candi["smiles"] = str(general_var["smi_list"][candi["candi_index"]])
         #     candi["mw"] = float(general_var["mw_list"][candi["candi_index"]])

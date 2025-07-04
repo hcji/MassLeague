@@ -4,7 +4,7 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
 
 /**
  * <pre>
- *定义文件管理服务
+ *Define the file management service
  * </pre>
  */
 @javax.annotation.Generated(

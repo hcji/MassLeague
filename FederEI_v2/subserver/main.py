@@ -5,15 +5,15 @@ from api import subnode_call_pb2,subnode_call_pb2_grpc
 from service import subnode_call_service_impl
 
 def run(dataset_name, port=50051):
-    """启动 gRPC 服务
+    """Start gRPC server
     Args:
-        dataset_name: 数据集名称（传递给init_var）
-        port: 服务端口号，默认50051
+        dataset_name: The name of the library used
+        port: Server port number, default 50051
     """
-    # 初始化变量
+    # initialization variable
     init_var(dataset_name)
     
-    # 创建服务器
+    # Create a server
     server = grpc.server(
         futures.ThreadPoolExecutor(max_workers=10),
         options=[
@@ -22,23 +22,23 @@ def run(dataset_name, port=50051):
         ],
     )
 
-    # 注册服务
+    # registration service
     subnode_call_pb2_grpc.add_SubNodeCallServiceServicer_to_server(
         subnode_call_service_impl.SubnodeCallServiceImpl(), 
         server
     )
 
-    # 绑定端口
+    # Binding port
     server.add_insecure_port(f"0.0.0.0:{port}")
 
-    # 启动服务
-    print(f"服务已启动 | 端口: {port} | 数据集: {dataset_name}")
+    # Start the service
+    print(f"The service has been started | port: {port} | dataset: {dataset_name}")
     server.start()
     
-    # 阻塞主线程
+    # Block the main thread
     server.wait_for_termination()
     
 
 if __name__ == "__main__":
-    run("distributed_2_0",50051)  # 默认启动单节点
+    run("distributed_2_0",50051)  # Default startup of a single node
     

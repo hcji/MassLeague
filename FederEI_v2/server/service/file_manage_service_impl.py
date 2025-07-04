@@ -19,7 +19,7 @@ class FileManageServiceImpl(file_manage_pb2_grpc.FileManageServiceServicer):
             ms_file_dir_path.mkdir(parents=True)
         file_name = None
         save_path = None
-        # 保存上传的文件
+        # Save the uploaded file
         for request in request_iterator:
             if request.HasField("chunk"):
                 with open(save_path, "ab") as f:
@@ -29,11 +29,11 @@ class FileManageServiceImpl(file_manage_pb2_grpc.FileManageServiceServicer):
                 save_path = ms_file_dir_path / file_name
                 if save_path.exists() and save_path.is_file():
                     print(save_path)
-                    # 抛出重复上传异常
+                    # Throwing an exception for duplicate upload
                     context.set_code(grpc.StatusCode.ALREADY_EXISTS)
                     context.set_details(f"{file_name} repeat upload")
                     raise
-        # # ==========测试1==========
+        # # ==========Test1==========
         # if file_suffix == ".mgf":
         #     for i, spec in enumerate([{'compound_name':f"{k}"} for k in range(10)]):
         #         result = file_manage_pb2.SubmitFileResponse.Result(
@@ -46,9 +46,9 @@ class FileManageServiceImpl(file_manage_pb2_grpc.FileManageServiceServicer):
         #             result=result,
         #         )
         #         yield response
-        # # ==========测试1==========
+        # # ==========Test1==========
         
-        # 准备返回值
+        # Prepare the return value
         file_suffix = save_path.suffix
         if file_suffix == ".mgf":
             spectrum_list = load_from_mgf(str(save_path))

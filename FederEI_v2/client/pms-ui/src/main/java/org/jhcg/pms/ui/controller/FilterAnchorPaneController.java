@@ -49,8 +49,8 @@ public class FilterAnchorPaneController {
             try {
                 sqliteUtil = new SqliteUtil(ServiceCenter.getDbPath() + "candidate.db");
 
-                //2.刷新CandidatesTab
-                //2.0清空所有行
+                //2.Refresh CandidatesTab
+                //2.0Clear all rows
                 CandidatesAnchorPaneSence.clearCandidatesTableRows();
 
                 String sql2 = "select pid,inchikey,smiles,mw,distance,rank from candidate_message where id=? and file_name=? and mw >= ? and mw <= ?;";
@@ -71,7 +71,7 @@ public class FilterAnchorPaneController {
                         BigDecimal bigDistance = new BigDecimal(distance).setScale(4,RoundingMode.HALF_UP);
                         int rank = resultSet.getInt("rank");
 
-                        // 添加表格行数据
+                        // Add data to the table rows
                         CandidatesAnchorPaneSence.addCandidatesTableRow(new CandidatesTableRow(pid, inchikey, smiles, bigMW, bigDistance, rank));
                         resultTabPane.getTabs().get(1).setDisable(false);
 
@@ -122,8 +122,8 @@ public class FilterAnchorPaneController {
             try {
                 sqliteUtil = new SqliteUtil(ServiceCenter.getDbPath() + "candidate.db");
 
-                //2.刷新CandidatesTab
-                //2.0清空所有行
+                //2.Refresh CandidatesTab
+                //2.0Clear all rows
                 CandidatesAnchorPaneSence.clearCandidatesTableRows();
 
                 String sql2 = "select pid,inchikey,smiles,mw,distance,rank from candidate_message where id=? and file_name=?;";
@@ -142,7 +142,7 @@ public class FilterAnchorPaneController {
                         BigDecimal bigDistance = new BigDecimal(distance).setScale(4,RoundingMode.HALF_UP);
                         int rank = resultSet.getInt("rank");
 
-                        // 添加表格行数据
+                        // Add data to the table rows
                         CandidatesAnchorPaneSence.addCandidatesTableRow(new CandidatesTableRow(pid, inchikey, smiles, bigMW, bigDistance, rank));
                         resultTabPane.getTabs().get(1).setDisable(false);
 
@@ -175,7 +175,7 @@ public class FilterAnchorPaneController {
     }
 
     public void initialize() {
-        //1.设置未知化合物的分子质量
+        //1.Add table row data to set the molecular weight of the unknown compound
         SqliteUtil sqliteUtil = null;
         ResultSet resultSet = null;
         try {

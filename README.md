@@ -78,5 +78,5 @@ Please refer to:
 ## 👥 Contributors
 
   > Sihao Chang (isihaochang@outlook.com)    
-  > Ziyao Xiong (xiaongzy@163.com)      
+  > Ziyao Xiong (ziyaobear@163.com)      
   > Hongchao Ji (jihongchao@caas.cn)

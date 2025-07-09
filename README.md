@@ -32,13 +32,14 @@ MassLeague addresses challenges such as:
 ---
 
 ## 🧪 Use Cases
-Metabolomics: Annotation of unknown metabolites in large-scale untargeted LC/GC-MS datasets
 
-Toxicology: Identification of unknown compounds in complex mixtures
+- Metabolomics: Annotation of unknown metabolites in large-scale untargeted LC/GC-MS datasets
 
-Drug Discovery: Structure elucidation from MS/MS data of synthetic or natural products
+- Toxicology: Identification of unknown compounds in complex mixtures
 
-Environmental Chemistry: Compound identification in environmental samples across labs
+- Drug Discovery: Structure elucidation from MS/MS data of synthetic or natural products
+
+- Environmental Chemistry: Compound identification in environmental samples across labs
 
 ---
 
